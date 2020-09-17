@@ -1,0 +1,18 @@
+{
+  "type": "transport",
+
+    "carryingCapacity": 5000,
+
+
+      "armor": 100,
+
+
+      "fuel": 1000,
+
+
+      "fuelType": "diesel",
+
+
+      "name": "Victory"
+
+}
