@@ -1,39 +1,29 @@
 package com.github.andygo298.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.andygo298.model.SpaceShip;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import com.github.andygo298.dto.ShipDto;
+import com.github.andygo298.model.ship.SpaceShip;
+import com.github.andygo298.service.ShipService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/api/v1/ship/factory")
 public class ShipController {
 
-    @PostMapping(value = "/upload")
-    public ResponseEntity<Object> getTask() throws IOException, URISyntaxException, ClassNotFoundException {
+    private final ShipService shipService;
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        Path path = Paths.get(Objects.requireNonNull(getClass().getClassLoader()
-                .getResource("task.json")).toURI());
-        File file = new File(String.valueOf(path));
-
-        final String json = "{\"type\":}";
-        final ObjectNode node = new ObjectMapper().readValue(json, ObjectNode.class);
-
-        Object type = objectMapper.readValue(file, Class.forName(String.valueOf(node.get("type"))));
-
-        return ResponseEntity.ok(type);
+    @Autowired
+    public ShipController(ShipService shipService) {
+        this.shipService = shipService;
     }
 
+    @PostMapping(value = "/build", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
+    public SpaceShip buildSheep(@RequestBody ShipDto shipDto) {
+        return shipService.buildSpaceShip(shipDto);
+    }
 }
